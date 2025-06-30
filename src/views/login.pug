@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  div.container.h-screen.w-screen
+    // to center login box
+    div.flex.flex-row.justify-center.h-screen.items-center.w-screen
+
+      // login box
+      div(class='w[200px]').flex.flex-col.p-1
+        form(action=action method='POST').space-y-2
+          input(name='formid' type='hidden' value=csrf_token)
+          div.order-1
+            input(class=`bg-${wd_color}-50` name='username' placeholder='User Name' type='text' required).p-1.outline-0.rounded-sm.w-full
+          div.order-2
+            input(class=`bg-${wd_color}-50` name='password' placeholder='Password' type='password' required).p-1.outline-0.rounded-sm.w-full
+          div.order-2.text-right
+            button(class=`active:bg-${wd_color}-900 active:border-${wd_color}-900 hover:bg-${wd_color}-700 bg-${wd_color}-800 border-${wd_color}-700 text-${wd_color}-50` type='submit').border.p-1.rounded-sm.shadow.shadow-zinc-900 Login
+
+

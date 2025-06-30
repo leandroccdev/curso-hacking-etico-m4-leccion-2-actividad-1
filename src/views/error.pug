@@ -1,0 +1,6 @@
+extends layout
+
+block content
+  h1.text-zinc-50= message
+  h2.text-zinc-50= error.status
+  pre.mt-2.text-zinc-50 #{error.stack}

@@ -1,0 +1,13 @@
+- var color=wd_color
+- var _version = "v" + version
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    title= title
+    link(rel='stylesheet', href='/css/style.css')
+    script(src='https://cdn.tailwindcss.com')
+  body(class='bg-zinc-800')
+    block content
+    div(class='fixed bottom-0 left-0 right-0 text-right')
+      label.p-1.text-orange-50= _version
