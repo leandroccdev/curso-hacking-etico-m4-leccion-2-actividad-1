@@ -6,9 +6,9 @@ const tw_util = require('../util/tw.js');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   res.render('login', {
-    action: '/users/auth',
+    action: '/usuario/autenticar',
     csrf_token: req.csrfToken(),
-    title: 'Sign In',
+    title: 'Inicio de Sesión',
     version: app_version,
     wd_color: tw_util.get_color(),
   });

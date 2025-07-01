@@ -2,18 +2,21 @@ extends layout
 
 block content
   div.container.h-screen.w-screen
-    // to center login box
+    // para centrar Inicio de Sessión
     div.flex.flex-row.justify-center.h-screen.items-center.w-screen
 
       // login box
-      div(class='w[200px]').flex.flex-col.p-1
+      div(class='w[200px]').border.flex.flex-col.p-3.rounded-sm
         form(action=action method='POST').space-y-2
           input(name='formid' type='hidden' value=csrf_token)
-          div.order-1
-            input(class=`bg-${wd_color}-50` name='username' placeholder='User Name' type='text' required).p-1.outline-0.rounded-sm.w-full
+          div(class='!mt-0').order-1
+            h3(class=``).text-zinc-50 Inicio de Sesión
           div.order-2
-            input(class=`bg-${wd_color}-50` name='password' placeholder='Password' type='password' required).p-1.outline-0.rounded-sm.w-full
-          div.order-2.text-right
-            button(class=`active:bg-${wd_color}-900 active:border-${wd_color}-900 hover:bg-${wd_color}-700 bg-${wd_color}-800 border-${wd_color}-700 text-${wd_color}-50` type='submit').border.p-1.rounded-sm.shadow.shadow-zinc-900 Login
+            input(class=`bg-${wd_color}-50` name='username' placeholder='Nombre de Usuario' type='text' required)#username.p-1.outline-0.rounded-sm.w-full
+          div.order-3
+            input(class=`bg-${wd_color}-50` name='password' placeholder='Contraseña' type='password' required)#password.p-1.outline-0.rounded-sm.w-full
+          div.order-4.text-right
+            button(class=`active:bg-${wd_color}-900 active:border-${wd_color}-900 disabled:active:bg-${wd_color}-800 disabled:active:border-${wd_color}-700 disabled:cursor-not-allowed disabled:opacity-75 disabled:hover:bg-${wd_color}-800 hover:bg-${wd_color}-700 bg-${wd_color}-800 border-${wd_color}-700 text-${wd_color}-50` type='submit' disabled)#login-btn.border.cursor-pointer.p-1.rounded-sm.shadow.shadow-zinc-900 Iniciar Sesión
 
-
+block body_script
+  script(src='/js/usuarios.inicio-sesion.js')

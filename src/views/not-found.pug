@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  div.container.h-screen.w-screen
+    // centra error
+    div.flex.flex-row.justify-center.h-screen.items-center.w-screen
+
+      // error box
+      div(class='w[300px]').flex.flex-col
+        h1.text-zinc-50
+          span.text-zinc-50 ¿Te perdiste? no importa...
+          a(class='hover:font-bolder hover:underline' href='javascript:history.back()').font-bold.ml-2.text-xl.text-zinc-50 Volver
