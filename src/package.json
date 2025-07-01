@@ -11,6 +11,7 @@
     "dev": "DEBUG=app:*; NODE_ENV=development nodemon ./bin/www"
   },
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^17.0.0",
