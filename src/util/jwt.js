@@ -44,6 +44,16 @@ async function auth_verify(req, res, next) {
             res.redirect('/usuario/login');
         }
 
+        // Session correcta, se configura la sesión para el middleware siguiente
+        else {
+            req.session.user = {
+                userId:    user_session.userId,
+                sessionId: decoded_token.sessionId,
+                name:      decoded_token.name,
+                isAdmin:   decoded_token.isAdmin
+            };
+        }
+
         // Verificación exitosa del token jwt
         return next();
     // Usuario sin token o con token expirado
