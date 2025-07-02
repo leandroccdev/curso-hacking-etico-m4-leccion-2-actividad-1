@@ -4,6 +4,7 @@
     "password": "",
     "database": "",
     "host": "",
+    "port": "",
     "dialect": "mysql"
   },
   "production": {
@@ -11,6 +12,7 @@
     "password": "",
     "database": "",
     "host": "",
+    "port": "",
     "dialect": "mysql"
   }
 }
