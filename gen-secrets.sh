@@ -81,14 +81,13 @@ src_config="${src_folder}config/config.json${test_files_postfix}"
 # Generación de secrets para mysql
 mysql_database=$(< /dev/urandom tr -cd '[:alnum:]' | head -c 15)
 mysql_user=$(< /dev/urandom tr -cd '[:alnum:]' | head -c 10)
-mysql_password=$(< /dev/urandom tr -cd '[:graph:]' | head -c 60)
-mysql_root_password=$(< /dev/urandom tr -cd '[:graph:]' | head -c 60)
+mysql_password=$(< /dev/urandom tr -cd '[:graph:]' | head -c 60 | tr ';(){}#![]$=\\"`' '-' | tr "'" "@")
+mysql_root_password=$(< /dev/urandom tr -cd '[:graph:]' | head -c 60 | tr ';(){}#![]$=\\"`' '-' | tr "'" "@")
 
 # Generación de docker/mysql.env
 cp $sample_env_mysql $env_mysql
-
-sed -i "s|MYSQL_DATABASE=|MYSQL_DATABASE=${mysql_database}|" $env_mysql
-sed -i "s|MYSQL_USER=|MYSQL_USER=${mysql_user}|" $env_mysql
+replace_line $env_mysql "MYSQL_DATABASE=" "MYSQL_DATABASE=${mysql_database}"
+replace_line $env_mysql "MYSQL_USER=" "MYSQL_USER=${mysql_user}"
 replace_line $env_mysql "MYSQL_PASSWORD=" "MYSQL_PASSWORD=${mysql_password}"
 replace_line $env_mysql "MYSQL_ROOT_PASSWORD=" "MYSQL_ROOT_PASSWORD=${mysql_root_password}"
 
@@ -100,7 +99,8 @@ replace_line $src_config "\"username\": \"\"" "\"username\": \"${mysql_user}\""
 replace_line $src_config "\"password\": \"\"" "\"password\": \"${mysql_password}\""
 replace_line $src_config "\"password\": \"\"" "\"password\": \"${mysql_password}\""
 sed -i "s|\"database\": \"\"|\"database\": \"${mysql_database}\"|g" $src_config
-sed -i "s|\"host\": \"\"|\"host\": \"${mysql_host_port}\"|g" $src_config
+sed -i "s|\"host\": \"\"|\"host\": \"${mysql_host}\"|g" $src_config
+sed -i "s|\"port\": \"\"|\"port\": \"${mysql_port}\"|g" $src_config
 
 # Generación de secrets para src/.env
 session_secret=$(< /dev/urandom tr -cd '[:graph:]' | head -c 100 | tr -d '\\')
@@ -114,6 +114,5 @@ sed -i "s|DB_HOST=|DB_HOST=${mysql_host}|g" $src_env
 sed -i "s|DB_PORT=|DB_PORT=${mysql_port}|g" $src_env
 replace_line $src_env "SESSION_SECRET=" "SESSION_SECRET=${session_secret}"
 replace_line $src_env "JWT_SECRET=" "JWT_SECRET=${jwt_secret}"
-replace_line $src_env "DB_USER=" "DB_USER=${mysql_user}"
 replace_line $src_env "DB_USER=" "DB_USER=${mysql_user}"
 replace_line $src_env "DB_PASSWORD=" "DB_PASSWORD=${mysql_password}"
