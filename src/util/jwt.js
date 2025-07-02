@@ -76,6 +76,42 @@ async function auth_verify(req, res, next) {
 }
 
 /**
+ * Verifica que el usuario de la sesión sea administrador o devuelve al inicio.
+ * Nota: no verifica la autenticación ni busca por sesiones activas.
+ */
+function verify_admin(req, res, next) {
+ try {
+        let token = req.cookies?.token || null;
+
+        // No hay token
+        if (!token)
+            return res.redirect('/usuario/login');
+
+        // Intenta realizar decodificación
+        let decoded_token = jwt.verify(
+            token,
+            JWT_SECRET,
+            {
+                algorithms: [JWT_ALGORITHM]
+            }
+        );
+
+        // el usuario no es administrador
+        if (!decoded_token.isAdmin)
+            return res.redirect('/');
+
+        // el usuario es administrador
+        next();
+
+    // Usuario sin token o con token expirado
+    } catch (err) {
+        console.log(err);
+        // Redirigir al login
+        return res.redirect('/usuario/login');
+    }
+}
+
+/**
  * Middleware usado en login y autenticación.
  * Su función es la inversa a verify_token, cuando el usuario tiene el
  * token y éste es valido, se redirige a /, de lo contrario se procede
@@ -110,7 +146,8 @@ function users_verify_token(req, res, next) {
 }
 
 module.exports = {
+    auth_verify: auth_verify,
     get_now: get_now,
     users_verify_token: users_verify_token,
-    auth_verify: auth_verify,
+    verify_admin: verify_admin
 };

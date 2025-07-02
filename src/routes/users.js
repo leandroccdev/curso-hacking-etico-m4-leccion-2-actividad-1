@@ -29,7 +29,7 @@ const SESSION_MAX_AGE = parseInt(process.env.SESSION_MAX_AGE);
  * Muestra la vista de registro de usuarios
  */
 router.get('/registro', (req, res, next) => {
-    res.render('register', {
+    res.render('user/register', {
         action: '/usuario',
         csrf_token: req.csrfToken(),
         errors: req.session.errors,
@@ -95,7 +95,7 @@ router.post('/', async (req, res, next) => {
  * Permite al usuario iniciar sesión
  */
 router.get('/login', jwt_util.users_verify_token, async (req, res, next) => {
-    res.render('login', {
+    res.render('user/login', {
         action: '/usuario/autenticar',
         csrf_token: req.csrfToken(),
         errors: req.session.errors,
@@ -238,6 +238,41 @@ router.get('/logout', async (req, res, next) => {
     }
 
     return res.redirect('/usuario/login');
+});
+
+/**
+ * Gestiona la administración de roles en los usuarios
+ * Solo para administradores
+ */
+router.post('/rol', jwt_util.auth_verify, jwt_util.verify_admin, async (req, res, next) => {
+    ssr.reset_error_messages(req);
+    ssr.reset_success_messages(req);
+
+    // Procesa campos del tipo user-[id]-rol
+    let user_rol_changed = false;
+    for (const k of Object.keys(req.body)) {
+        if (/user-[0-9]+-rol/.test(k)) {
+            const match = k.match(/user-([0-9]+)-rol/);
+            // match: [ 'user-1-rol', '1', index: 0, input: 'user-1-rol', groups: undefined ]
+            if (match.length > 0) {
+                // Verifica que userId exista
+                let user = await db.User.findByPk(match[1]);
+                // Usuario existe, se modifica el rol del usuario
+                if (user) {
+                    user.isAdmin = req.body[k] === '1';
+                    console.log(req.body[k] === '1');
+                    user.save();
+                    user_rol_changed = true;
+                }
+            }
+        }
+    }
+
+    // Notifica al usuario sobre los cambios guardados
+    if (user_rol_changed)
+        req.session.success.push('¡Cambios guardados!');
+
+    return res.redirect('/admin/usuarios');
 });
 
 module.exports = router;

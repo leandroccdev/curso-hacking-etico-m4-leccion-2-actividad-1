@@ -1,0 +1,49 @@
+extends ../layout
+
+block content
+  div.container.h-screen.w-screen
+    // centrar tabla
+    div.flex.flex-row.h-screen.items-center.justify-center.w-screen
+      
+      // usuarios
+      div(class=`bg-zinc-50`).p-2.rounded-sm.shadow-sm.shadow-zinc-800
+        // errores y mensajes de éxito
+        div.mb-2
+          if success.length > 0
+            // mensajes de éxito
+            ul.space-y-1
+              - var succ = null;
+              while succ=success.pop()
+                li.bg-lime-100.text-lime-600.px-2.py-1.rounded-sm= succ
+
+          if errors.length > 0
+            // mensajes de error
+            ul.space-y-1
+              - var err = null;
+              while err=errors.pop()
+                li.bg-red-100.text-red-600.px-2.py-1.rounded-sm= err
+
+        form(action=action method='POST')
+          input(name='formid' type='hidden' value=csrf_token)
+
+          table(class=`bg-${wd_color}-50 border-${wd_color}-700`).border.border-collapse.p-2.table-auto
+            caption(class=`bg-${wd_color}-50 border-${wd_color}-700 text-${wd_color}-900`).border.border-b-0.font-bold.px-2.py-1.text-left.text-lg Roles de Usuarios
+            tr
+              th(class=`border-${wd_color}-700 text-${wd_color}-900`).border.px-2.py-1 Nombre
+              th(class=`border-${wd_color}-700 text-${wd_color}-900`).border.px-2.py-1 Administrador
+              th(class=`border-${wd_color}-700 text-${wd_color}-900`).border.px-2.py-1 Rol
+            each u in users
+              tr
+                td(class=`border-${wd_color}-700 text-${wd_color}-900`).border.px-2.py-1= u.name
+                td(class=`border-${wd_color}-700 text-${wd_color}-900`).border.px-2.py-1= u.isAdmin ? 'Sí' : 'No'
+                td(class=`border-${wd_color}-700 text-${wd_color}-900`).border.px-2.py-1
+                  select(class=`bg-${wd_color}-100 border-${wd_color}-500 text-${wd_color}-900` name=`user-${u.id}-rol`).border.outline-none.px-2.py-1.rounded-sm
+                    if u.isAdmin
+                      option(value=0) Usuario
+                      option(value=1 selected) Administrador
+                    else
+                      option(value=0 selected) Usuario
+                      option(value=1) Administrador
+          // Guardar cambios
+          div.mt-2.text-right
+            button(class=`active:bg-${wd_color}-800 active:border-${wd_color}-800 hover:bg-${wd_color}-700 hover:border-${wd_color}-700 bg-${wd_color}-600 border-${wd_color}-600 text-${wd_color}-50` type='submit')#save-btn.border.cursor-pointer.p-1.rounded-sm.shadow.shadow-zinc-400 Guardar

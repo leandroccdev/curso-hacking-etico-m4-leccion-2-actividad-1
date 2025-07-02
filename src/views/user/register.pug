@@ -1,4 +1,4 @@
-extends layout
+extends ../layout
 
 block content
   div.container.h-screen.w-screen
@@ -16,13 +16,15 @@ block content
             if success.length > 0
               // mensajes de éxito
               ul.space-y-1
-                each succ in success
+                - var succ = null;
+                while succ=success.pop()
                   li.bg-lime-100.text-lime-600.px-2.py-1.rounded-sm= succ
 
             if errors.length > 0
               // mensajes de error
               ul.space-y-1
-                each err in errors
+                - var err = null;
+                while err=errors.pop()
                   li.bg-red-100.text-red-600.px-2.py-1.rounded-sm= err
 
           div.order-3
@@ -33,7 +35,7 @@ block content
             input(class=`bg-${wd_color}-50` minlenth='8' name='password2' placeholder='Repetir Contraseña' type='password' required)#password2.p-1.outline-0.rounded-sm.w-full
             span#err-password2-not-match.bg-red-100.text-red-600.hidden.inline-block.mt-1 ¡Las contraseñas no concuerdan!
           div.order-6.text-right
-            button(class=`active:bg-${wd_color}-900 active:border-${wd_color}-900 bg-${wd_color}-800 disabled:active:bg-${wd_color}-800 disabled:active:border-${wd_color}-700 disabled:cursor-not-allowed disabled:hover:bg-${wd_color}-800 disabled:opacity-75 hover:bg-${wd_color}-700 border-${wd_color}-700 text-${wd_color}-50` type='submit' disabled)#registrar-btn.border.cursor-pointer.p-1.rounded-sm.shadow.shadow-zinc-900 Registrar
+            button(class=`active:bg-${wd_color}-900 active:border-${wd_color}-900 bg-${wd_color}-800 disabled:active:bg-${wd_color}-800 disabled:active:border-${wd_color}-700 disabled:cursor-not-allowed disabled:hover:bg-${wd_color}-800 disabled:opacity-75 hover:bg-${wd_color}-700 border-${wd_color}-700 text-${wd_color}-50` type='submit' disabled)#registrar-btn.border.cursor-pointer.p-1.rounded-sm.shadow.shadow-zinc-800 Registrar
 
 block body_script
  script(src='/js/usuarios.registro.js')
