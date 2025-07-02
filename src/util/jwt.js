@@ -8,11 +8,22 @@ const JWT_EXPIRE_IN = process.env.JWT_EXPIRE_IN;
 const JWT_ALGORITHM = process.env.JWT_ALGORITHM;
 
 /**
+ * Genera un timestamp compatible con el campo exp de jwt para compararciones.
+ * 
+ * @returns Integer
+ */
+function get_now() {
+    return Math.floor(Date.now() / 1000);
+}
+
+/**
  * Middleware para verificar el token jwt y comprueba la sesión en base de datos.
  */
 async function auth_verify(req, res, next) {
     try {
         let token = req.cookies?.token || null;
+
+        // No hay token
         if (!token)
             return res.redirect('/usuario/login');
 
@@ -31,7 +42,7 @@ async function auth_verify(req, res, next) {
                 sessionId: decoded_token.sessionId,
                 active: true,
                 expireAt: {
-                    [Op.gt]: jwt_util.get_now()
+                    [Op.gt]: get_now()
                 }
             }
         });
@@ -41,7 +52,7 @@ async function auth_verify(req, res, next) {
             // Le indica al browser que elimine la cookie
             res.clearCookie('token', { path: '/' });
             // De vuelta al login
-            res.redirect('/usuario/login');
+            return res.redirect('/usuario/login');
         }
 
         // Session correcta, se configura la sesión para el middleware siguiente
@@ -55,9 +66,10 @@ async function auth_verify(req, res, next) {
         }
 
         // Verificación exitosa del token jwt
-        return next();
+        next();
     // Usuario sin token o con token expirado
     } catch (err) {
+        console.log(err);
         // Redirigir al login
         return res.redirect('/usuario/login');
     }
@@ -95,15 +107,6 @@ function users_verify_token(req, res, next) {
         // Se prosigue con el login/autenticación
         return next();
     }
-}
-
-/**
- * Genera un timestamp compatible con el campo exp de jwt para compararciones.
- * 
- * @returns Integer
- */
-function get_now() {
-    return Math.floor(Date.now() / 1000);
 }
 
 module.exports = {
