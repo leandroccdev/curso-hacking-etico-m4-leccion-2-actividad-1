@@ -46,7 +46,7 @@ El agente revisor deberá iniciar kvm de acuerdo a su arquitectura de CPU.
 - Iniciar kvm_amd: `sudo modprobe kvm_amd`
 - Iniciar kvm_intel: `sudo modprobe kvm_intel`
 - Iniciar docker: `systemctl --user start docker-desktop`
-- Iniciar servicios: `docker compose -p 'flcanellas_' up -d`
+- Iniciar servicios: `docker compose -p 'flcanellas' up -d`
 
 #### Detener servicios docker (Arch Linux)
 El agente revisor deberá eliminar el modulo kvm de acuerdo a su arquitectura de CPU.
@@ -58,8 +58,8 @@ El agente revisor deberá eliminar el modulo kvm de acuerdo a su arquitectura de
 - Iniciar servicios: `docker compose start`
 
 #### Eliminar servicios docker (Arch Linux)
-- `docker compose -p 'flcanellas_' down -v`: elimina los servicios y sus volúmenes.
-- `docker compose -p 'flcanellas_' down`: elimina solo servicios.
+- `docker compose -p 'flcanellas' down -v`: elimina los servicios y sus volúmenes.
+- `docker compose -p 'flcanellas' down`: elimina solo servicios.
 - `docker network prune`: elimina las redes no utilizadas en docker.
 - `docker system prune`: elimina contenedores detenidos, redes no usadas y caché de construcción (no solo relacionados al proyecto actual).
 
@@ -85,7 +85,7 @@ Al igual que `docker compose ls -a`
 
 ```
 NAME                STATUS              CONFIG FILES
-flcanellas_         exited(1)           .../app/docker/docker-compose.yml
+flcanellas         exited(1)           .../app/docker/docker-compose.yml
 ```
 
 #### Problemas experimentados
@@ -94,7 +94,7 @@ flcanellas_         exited(1)           .../app/docker/docker-compose.yml
 Ésto sucede porque no se usó `docker compose - p 'flcanellas' [acción]`.
 - `docker compose -p 'flcanellas' down -v`: debería eliminar los servicios del proyecto actual.
 
-Una vez que docker compose **no muestre el proyecto actual** ya se podrá proceder a levantar servicios otra vez con `docker compose -p `flcanellas_` up -d`.
+Una vez que docker compose **no muestre el proyecto actual** ya se podrá proceder a levantar servicios otra vez con `docker compose -p `flcanellas` up -d`.
 
 ##### ¿Debería eliminar imágenes?
 El estudiante no lo recomienda, aunque si el agente revisor así lo requiere, primero debería inspeccionar las imágenes actuales:
@@ -135,6 +135,12 @@ Para deshacer la inicialización se debe realizar lo siguiente:
 
 ##### Borrar la tabla SequelizeMeta
 Correr directamente desde MySQL Workbench/phpmyadmin/otro DBMS: `DROP TABLE SequelizeMeta;`
+
+##### Problemáticas
+En algunos casos al correr sequelize-cli saldrá el siguiente error:
+`ERROR: Connection lost: The server closed the connection`
+
+En tal caso habrá que esperar unos segundos para darle tiempo a los servicios de terminar su inicialización antes de intentar usar sequelize-cli nuevamente.
 
 #### Iniciar APP
 Inicia la aplicación en modo productivo: `npm start`
