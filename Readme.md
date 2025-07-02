@@ -1,6 +1,30 @@
 ### Guía para el agente revisor
 El estudiante asume conocimientos básicos en Linux para seguir la presente guía.
 
+#### Inicialización de la aplicación
+El aplicativo debe tener ciertas configuraciones antes de ser candidato a levantamiento de servicios y servidor de desarrollo\producción.
+- Generación de secretos y archivos de configuración `./gen-secrets.sh "IP MYSQL" "PUERTO MYSQL"`
+
+```
+user@machine:~.../app/docker$ ./gen-secrets.sh "127.0.0.1" "3306"
+```
+
+Los siguientes archivos serán generados (sobreescribiendo a los originales si ya existían):
+- `src/config/config.json`
+- `src/.env`
+- `docker/mysql.env`
+
+Para testear la configuración se puede usar el parámetro `--test` al final, esto generará los siguientes archivos (para efectos demostrativos):
+- `src/config/config.json.test`
+- `src/.env.test`
+- `docker/mysql.env.test`
+
+Luego para eliminar dichos archivos el agente puede ejecutar el siguiente comando desde el directorio root del proyecto:
+
+```
+user@machine:~.../app/docker$ find . -type f -name '*.test' -exec rm {} \;
+```
+
 #### Cheatsheet para docker compose
 - https://devhints.io/docker-compose
 
