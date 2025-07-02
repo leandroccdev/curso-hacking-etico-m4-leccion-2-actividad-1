@@ -92,14 +92,31 @@ user@machine:~.../app/docker$ docker image ls
 REPOSITORY   TAG       IMAGE ID       CREATED        SIZE
 ```
 
-#### Iniciar APP
+### Base de datos
 
-`npm start`
+#### Inicialización
+Para inicializar la base de datos se debe realizar lo siguiente:
+- Posicionarse en la carpeta `app/src/`
+- Cargar las migraciones del proyecto: `npx sequelize-cli db:migrate`
+- Cargar las semillas del proyecto: `npx sequelize-cli db:seed:all`
+
+Se cargará el usuario `admin/2025#he048`.
+
+#### Deshacer la inicialización
+Para deshacer la inicialización se debe realizar lo siguiente:
+- Remover las semillas del proyecto: `npx sequelize-cli db:seed:undo`
+- Remover las migraciones del proyecto: `npx sequelize-cli db:migrate:undo`
+
+**Nota:** La tabla SequelizeMeta permanecerá.
+
+##### Borrar la tabla SequelizeMeta
+Correr directamente desde MySQL Workbench/phpmyadmin/otro DBMS: `DROP TABLE SequelizeMeta;`
+
+#### Iniciar APP
+Inicia la aplicación en modo productivo: `npm start`
 
 #### Iniciar dev server
-Inicia el servidor en modo development
-
-`npm run dev`
+Inicia la aplicación en modo desarrollo: `npm run dev`
 
 #### Tailwindcss
 
