@@ -6,7 +6,21 @@
 #    - src/config/config.json
 #
 # Uso
-#     gen-secrets.sh [IP| default: 127.0.0.1] [PORT|default: 3306] [TEST_FILES_POSTFIX]
+#     gen-secrets.sh [IP| default: 127.0.0.1] [PORT|default: 3306] [--test]
+#       -- test Genera archivos de configuración de prueba con postfijo .text
+#
+# Ejemplos de uso
+#     - Genera archivos de configuración de prueba (postfijo .test)
+#         ./gen-secrets.sh "172.10.0.2" "3306" --test
+#
+#     - Genera archivos de configuración de prueba (postfijo .test)
+#         ./gen-secrets.sh "" "" --test
+#
+#     - Genera archivos de configuración (sobreescribiendolos si ya existen)
+#         ./gen-secrets.sh
+#
+#     - Genera archivos de configuración (sobreescribiendolos si ya existen)
+#         ./gen-secrets.sh 172.10.0.2" "3306"
 #
 # OS: Arch Linux 6.14.10
 #
@@ -48,7 +62,7 @@ echo "[Info] MySQL host: ${mysql_host_port}"
 
 # Usar un postfijo para generar archivos de prueba
 test_files_postfix=""
-[[ -n $3 ]] && test_files_postfix=".${3}";
+[[ -n $3 && $3 == "--test" ]] && test_files_postfix=".test";
 
 # Carpetas
 docker_folder="./docker/"
