@@ -14,16 +14,16 @@ block content
           // errores y mensajes de éxito
           div.order-2
             if success.length > 0
-            // mensajes de éxito
-            ul.space-y-1
-              each succ in success
-                li.bg-lime-100.text-lime-600.px-2.py-1.rounded-sm= succ
+              // mensajes de éxito
+              ul.space-y-1
+                each succ in success
+                  li.bg-lime-100.text-lime-600.px-2.py-1.rounded-sm= succ
 
             if errors.length > 0
-            // mensajes de error
-            ul.space-y-1
-              each err in errors
-                li.bg-red-100.text-red-600.px-2.py-1.rounded-sm= err
+              // mensajes de error
+              ul.space-y-1
+                each err in errors
+                  li.bg-red-100.text-red-600.px-2.py-1.rounded-sm= err
 
           div.order-3
             input(class=`bg-${wd_color}-50` minlength='5' maxlength='40' name='username' placeholder='Nombre de Usuario' type='text' required)#username.p-1.outline-0.rounded-sm.w-full

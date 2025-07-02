@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER
         },
         sessionId: {
-            allowNull: DataTypes.STRING(32),
+            allowNull: DataTypes.STRING(36),
             type: DataTypes.TEXT
         },
         token: {
@@ -32,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             defaultValue: true,
             type: DataTypes.BOOLEAN
+        },
+        expireAt: {
+            allowNull: false,
+            type: DataTypes.INTEGER
         }
     }, {
         sequelize,
