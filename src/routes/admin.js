@@ -12,6 +12,7 @@ router.get('/usuarios', jwt_util.auth_verify, jwt_util.verify_admin, async (req,
 
     res.render('admin/users', {
         action: '/usuario/rol',
+        isAdmin: jwt_util.is_admin(req),
         csrf_token: req.csrfToken(),
         errors: req.session.errors,
         success: req.session.success,

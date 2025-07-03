@@ -2,6 +2,21 @@ extends ../layout
 
 block content
   div.container.h-screen.w-screen
-   // centrar blog
-  div.flex.flex-row.h-screen.items-center.justify-center.w-screen
-    test
+
+    // centrar blog
+    div.flex.flex-row.h-screen.items-center.justify-center.w-screen
+      
+      // mensajes
+      div(class'w-min[800px] w-[800px]').flex.flex-col.p-2
+        div.order-1
+          h3.font-bold.text-left.text-zinc-50 Mensajes
+
+        each p, i in posts
+          div(class=`bg-${wd_color}-100 border-${wd_color}-200 order-${i + 1} min-w-[500px]`).border.cursor-pointer.flex.flex-col.mt-2.overflow-hidden.radius-sm.rounded
+            div(class=`bg-${wd_color}-200`).px-1.order-1
+              div(class='w-1/2').inline-block
+                span(class=`text-${wd_color}-600`).font-bold= p.author.name
+              div(class='w-1/2').inline-block.text-right
+                span(class=`text-${wd_color}-600` style='font-size: 12px;').font-semibold= p.dataValues.creationDate + ' a las ' + p.dataValues.creationTime
+            div.px-2.py-1.order-2
+              a(class=`hover:underline text-${wd_color}-600` href=`/blog/${p.id}`).text-lg= p.title

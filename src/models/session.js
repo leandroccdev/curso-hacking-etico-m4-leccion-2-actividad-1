@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
             this.belongsTo(
                 models.User,
                 {
-                    foreignKey: 'id',
+                    foreignKey: 'userId',
                     as: 'user'
                 }
             );

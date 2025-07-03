@@ -1,0 +1,28 @@
+extends ../layout
+
+block content
+  div.container.h-screen.w-screen
+    // centrar blog
+    div.flex.flex-row.h-screen.items-center.justify-center.w-screen
+
+     div(class='w-min-[800px] w-[800px]').border.flex.flex-col.p-3.rounded-sm
+      div(class='!mt-0').border-b.mb-1.order-1
+        h3.font-bold.text-zinc-50.text-lg= post.title
+
+      div.order-2.flex.flex-row
+        div(class='w-1/2').order-1
+          span.text-sm.text-zinc-50= 'Por ' + post.author.name
+        div(class='w-1/2').order-2.text-right
+          span.text-zinc-50= post.dataValues.creationDate + ' a las ' + post.dataValues.creationTime
+
+      div.mt-3.order-3.text-justify
+        span.text-zinc-50= post.body
+
+      if isAdmin
+        div.order-4.text-right
+          form(action=delete_action method='POST').inline-block.mr-4
+            input(name="formid" type="hidden" value=csrf_token)
+            input(name="post" type="hidden" value=post.id)
+            button(class=`active:bg-${wd_color}-900 active:border-${wd_color}-900 bg-${wd_color}-800 disabled:active:bg-${wd_color}-800 disabled:active:border-${wd_color}-700 disabled:cursor-not-allowed disabled:hover:bg-${wd_color}-800 disabled:opacity-75 hover:bg-${wd_color}-700 border-${wd_color}-700 text-${wd_color}-50` type="submit").border.cursor-pointer.p-1.rounded-sm.shadow.shadow-zinc-800 Eliminar
+
+          a(class=`active:bg-${wd_color}-900 active:border-${wd_color}-900 bg-${wd_color}-800 disabled:active:bg-${wd_color}-800 disabled:active:border-${wd_color}-700 disabled:cursor-not-allowed disabled:hover:bg-${wd_color}-800 disabled:opacity-75 hover:bg-${wd_color}-700 border-${wd_color}-700 text-${wd_color}-50` href=`/blog/${post.id}/editar`).border.cursor-pointer.p-1.rounded-sm.shadow.shadow-zinc-800 Editar

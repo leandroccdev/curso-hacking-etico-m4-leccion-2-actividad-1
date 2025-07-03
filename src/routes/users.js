@@ -32,6 +32,7 @@ const SESSION_MAX_AGE = parseInt(process.env.SESSION_MAX_AGE);
 router.get('/registro', (req, res, next) => {
     res.render('user/register', {
         action: '/usuario',
+        isAdmin: jwt_util.is_admin(req),
         csrf_token: req.csrfToken(),
         errors: req.session.errors,
         success: req.session.success,

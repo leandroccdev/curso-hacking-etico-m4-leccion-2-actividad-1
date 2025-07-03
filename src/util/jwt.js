@@ -43,6 +43,32 @@ function get_user_name(req) {
 }
 
 /**
+ * Lee los datos de la sesión e indica si el usuario actual es administrador
+ * @returns True si el user es administrador, false si no lo es
+ */
+function is_admin(req) {
+     try {
+        let token = req.cookies?.token || null;
+    
+        // No hay token
+        if (!token)
+            return false;
+        // Intenta realizar decodificación
+        let decoded_token = jwt.verify(
+            token,
+            JWT_SECRET,
+            {
+                algorithms: [JWT_ALGORITHM]
+            }
+        );
+        // Devuelve el flag isAdmin
+        return decoded_token.isAdmin;
+    } catch (err) {
+        return false;
+    }
+}
+
+/**
  * Middleware para verificar el token jwt y comprueba la sesión en base de datos.
  */
 async function auth_verify(req, res, next) {
@@ -175,6 +201,7 @@ module.exports = {
     auth_verify: auth_verify,
     get_now: get_now,
     get_user_name: get_user_name,
+    is_admin: is_admin,
     users_verify_token: users_verify_token,
     verify_admin: verify_admin
 };

@@ -7,6 +7,7 @@ const logger = require('morgan');
 const session = require('express-session');
 const lusca = require('lusca');
 const app_version = require('./package.json').version;
+const tw_util = require('./util/tw.js');
 
 let app = express();
 
@@ -44,11 +45,11 @@ app.use(lusca.csrf({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-let indexRouter = require('./routes/index');
+let blogRouter = require('./routes/blog');
 let usersRouter = require('./routes/users');
 let adminRouter = require('./routes/admin');
 
-app.use('/', indexRouter);
+app.use('/', blogRouter);
 app.use('/usuario', usersRouter);
 app.use('/admin', adminRouter);
 
@@ -72,7 +73,8 @@ app.use(function (err, req, res, next) {
     else if (err.status == 404) {
         res.status(err.status);
         res.render('not-found', {
-            version: app_version
+            version: app_version,
+            wd_color: tw_util.get_color()
         });
     }
     else {

@@ -10,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
             this.belongsTo(
                 models.User,
                 {
-                    foreignKey: 'id',
-                    as: 'user'
+                    foreignKey: 'userId',
+                    as: 'author'
                 }
             );
         }

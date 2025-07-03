@@ -1,0 +1,46 @@
+extends ../layout
+
+block content
+  div.container.h-screen.w-screen
+    // centrar blog
+    div.flex.flex-row.h-screen.items-center.justify-center.w-screen
+
+        div(class='w-min-[600px] w-[600px]').border.flex.flex-col.p-3.rounded-sm
+          form(action=action method='POST').space-y-2.w-full
+            input(name='formid' type='hidden' value=csrf_token)
+            input(name='postId' type='hidden' value=post.id)
+
+            // errores y mensajes de éxito
+            if success.length > 0 || errors.length > 0
+              div.mb-2
+                if success.length > 0
+                  // mensajes de éxito
+                  ul.space-y-1
+                    - var succ = null;
+                    while succ=success.pop()
+                      li.bg-lime-100.text-lime-600.px-2.py-1.rounded-sm= succ
+
+                if errors.length > 0
+                  // mensajes de error
+                  ul.space-y-1
+                    - var err = null;
+                    while err=errors.pop()
+                      li.bg-red-100.text-red-600.px-2.py-1.rounded-sm= err
+
+            div(class='!mt-0').order-1
+              h3.font-bold.text-zinc-50.text-lg Editar Entrada
+
+            div.order-2
+              label.text-zinc-50 Título
+              input(class=`bg-${wd_color}-50` minlength='1' maxlength='40' name='title' placeholder='Título' type='text' value=post.title required)#title.p-1.outline-0.rounded-sm.w-full
+
+            div.order-3
+              label.text-zinc-50 Mensaje
+              textarea(class=`bg-${wd_color}-50` minlength='1' maxlength='65535' name='body' rows=10 required)#body.p-1.outline-0.rounded-sm.w-full= post.body
+
+            div.order-4.text-right
+              a(class=`active:bg-${wd_color}-900 active:border-${wd_color}-900 bg-${wd_color}-800 disabled:active:bg-${wd_color}-800 disabled:active:border-${wd_color}-700 disabled:cursor-not-allowed disabled:hover:bg-${wd_color}-800 disabled:opacity-75 hover:bg-${wd_color}-700 border-${wd_color}-700 text-${wd_color}-50` href='/').border.cursor-pointer.mr-2.p-1.rounded-sm.shadow.shadow-zinc-800 Volver
+              button(class=`active:bg-${wd_color}-900 active:border-${wd_color}-900 bg-${wd_color}-800 disabled:active:bg-${wd_color}-800 disabled:active:border-${wd_color}-700 disabled:cursor-not-allowed disabled:hover:bg-${wd_color}-800 disabled:opacity-75 hover:bg-${wd_color}-700 border-${wd_color}-700 text-${wd_color}-50` type='submit')#save-btn.border.cursor-pointer.p-1.rounded-sm.shadow.shadow-zinc-800 Guardar
+
+block body_script
+  script(src='/js/blog.editar.js')
