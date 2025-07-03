@@ -65,7 +65,7 @@ router.get('/blog/nuevo', jwt_util.auth_verify, async (req, res, next) => {
 router.get('/blog/:id', jwt_util.auth_verify, async (req, res, next) => {
     // Chequea XSS
     if (escape_html(req.params.id) !== req.params.id)
-        return res.redirection('/not-found');
+        return res.redirect('/not-found');
 
     // Busca post
     const post = await db.Post.findByPk(escape_html(req.params.id), {
@@ -111,7 +111,7 @@ router.get('/blog/:id', jwt_util.auth_verify, async (req, res, next) => {
 router.get('/blog/:id/editar', jwt_util.auth_verify, jwt_util.verify_admin, async (req, res, next) => {
     // Chequea XSS
     if (escape_html(req.params.id) !== req.params.id)
-        return res.redirection('/not-found');
+        return res.redirect('/not-found');
 
     // Busca post
     const post = await db.Post.findByPk(escape_html(req.params.id), {
@@ -134,7 +134,7 @@ router.get('/blog/:id/editar', jwt_util.auth_verify, jwt_util.verify_admin, asyn
 
     // no existe
     if (!post)
-        return res.redirection('/not-found');
+        return res.redirect('/not-found');
 
     res.render('blog/edit', {
         action: '/blog/editar',
