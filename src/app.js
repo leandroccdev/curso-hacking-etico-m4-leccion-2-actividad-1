@@ -40,14 +40,30 @@ app.use((req, res, next) => {
 });
 // Configura lusca para protección CSRF
 app.use(lusca.csrf({
+    csrf: true,
     header: 'req-id',
-    key: 'formid'
+    key: 'formid',
+    xssProtection: true,
+    referrerPolicy: 'same-origin'
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 let blogRouter = require('./routes/blog');
 let usersRouter = require('./routes/users');
 let adminRouter = require('./routes/admin');
+
+// Gestiona not_found
+const not_found = (req, res, next) => {
+    console.log('test');
+    res.status(404);
+    res.render('not-found', {
+        version: app_version,
+        wd_color: tw_util.get_color()
+    });
+};
+
+app.get('/not-found', not_found);
+app.post('/not-found', not_found);
 
 app.use('/', blogRouter);
 app.use('/usuario', usersRouter);
