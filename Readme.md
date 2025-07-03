@@ -58,8 +58,8 @@ El agente revisor deberá eliminar el modulo kvm de acuerdo a su arquitectura de
 - Iniciar servicios: `docker compose start`
 
 #### Eliminar servicios docker (Arch Linux)
-- `docker compose -p 'flcanellas' down -v`: elimina los servicios y sus volúmenes.
-- `docker compose -p 'flcanellas' down`: elimina solo servicios.
+- `docker compose -p 'flcanellas_m4_leccion2' down -v`: elimina los servicios y sus volúmenes.
+- `docker compose -p 'flcanellas_m4_leccion2' down`: elimina solo servicios.
 - `docker network prune`: elimina las redes no utilizadas en docker.
 - `docker system prune`: elimina contenedores detenidos, redes no usadas y caché de construcción (no solo relacionados al proyecto actual).
 
@@ -84,17 +84,17 @@ CONTAINER ID   IMAGE         COMMAND                  CREATED          STATUS   
 Al igual que `docker compose ls -a`
 
 ```
-NAME                STATUS              CONFIG FILES
-flcanellas         exited(1)           .../app/docker/docker-compose.yml
+NAME                           STATUS              CONFIG FILES
+flcanellas_m4_leccion2         exited(1)           .../app/docker/docker-compose.yml
 ```
 
 #### Problemas experimentados
 
 ##### Docker compose down -v no funciona
-Ésto sucede porque no se usó `docker compose - p 'flcanellas' [acción]`.
-- `docker compose -p 'flcanellas' down -v`: debería eliminar los servicios del proyecto actual.
+Ésto sucede porque no se usó `docker compose - p 'flcanellas_m4_leccion2' [acción]`.
+- `docker compose -p 'flcanellas_m4_leccion2' down -v`: debería eliminar los servicios del proyecto actual.
 
-Una vez que docker compose **no muestre el proyecto actual** ya se podrá proceder a levantar servicios otra vez con `docker compose -p `flcanellas` up -d`.
+Una vez que docker compose **no muestre el proyecto actual** ya se podrá proceder a levantar servicios otra vez con `docker compose -p 'flcanellas_m4_leccion2' -d`.
 
 ##### ¿Debería eliminar imágenes?
 El estudiante no lo recomienda, aunque si el agente revisor así lo requiere, primero debería inspeccionar las imágenes actuales:
