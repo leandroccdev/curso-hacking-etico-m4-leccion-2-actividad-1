@@ -2,6 +2,7 @@ require('dotenv').config();
 const { Op } = require('sequelize');
 const jwt = require('jsonwebtoken');
 const db = require('../models/index.js');
+const escape_html = require('escape-html');
 
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRE_IN = process.env.JWT_EXPIRE_IN;
@@ -27,6 +28,10 @@ function get_user_name(req) {
         // No hay token
         if (!token)
             return null;
+
+        // Escapado XSS
+        token = escape_html(token);
+
         // Intenta realizar decodificación
         let decoded_token = jwt.verify(
             token,
@@ -53,6 +58,10 @@ function is_admin(req) {
         // No hay token
         if (!token)
             return false;
+
+        // Escapado XSS
+        token = escape_html(token);
+
         // Intenta realizar decodificación
         let decoded_token = jwt.verify(
             token,
@@ -79,6 +88,9 @@ async function is_logged(req) {
         // No hay token
         if (!token)
             return false;
+
+        // Escapado XSS
+        token = escape_html(token);
 
         // Intenta realizar decodificación
         let decoded_token = jwt.verify(
@@ -116,6 +128,9 @@ async function auth_verify(req, res, next) {
         // No hay token
         if (!token)
             return res.redirect('/usuario/login');
+
+        // Escapado XSS
+        token = escape_html(token);
 
         // Intenta realizar decodificación
         let decoded_token = jwt.verify(
@@ -177,6 +192,9 @@ function verify_admin(req, res, next) {
         if (!token)
             return res.redirect('/usuario/login');
 
+        // Escapado XSS
+        token = escape_html(token);
+
         // Intenta realizar decodificación
         let decoded_token = jwt.verify(
             token,
@@ -209,16 +227,18 @@ function verify_admin(req, res, next) {
  */
 function users_verify_token(req, res, next) {
     try {
-        let jwt_token = req.cookies?.token || null;
-        // console.log(jwt_token, !jwt_token);
+        let token = req.cookies?.token || null;
 
         // No viene el token, se prosigue con el login/autenticación
-        if (!jwt_token)
+        if (!token)
             return next();
 
+        // Escapado XSS
+        token = escape_html(token);
+
         // Intenta realizar decodificación
-        let r = jwt.verify(
-            jwt_token,
+        jwt.verify(
+            token,
             JWT_SECRET,
             {
                 algorithms: [JWT_ALGORITHM]

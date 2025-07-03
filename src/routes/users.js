@@ -121,10 +121,14 @@ router.post('/autenticar', jwt_util.users_verify_token, async (req, res, next) =
     ssr.reset_error_messages(req);
     ssr.reset_success_messages(req);
 
-    const { username, password } = req.body;
+    let { username, password } = req.body;
     let is_login_ok = false;
 
     is_login_ok = !!username && !!password;
+
+    // Escapado XSS
+    username = escape_html(username);
+    password = escape_html(password);
 
     // Validar existencia de usuario
     if (is_login_ok) {
@@ -266,7 +270,6 @@ router.post('/rol', jwt_util.auth_verify, jwt_util.verify_admin, async (req, res
                 // Usuario existe, se modifica el rol del usuario
                 if (user) {
                     user.isAdmin = req.body[k] === '1';
-                    console.log(req.body[k] === '1');
                     user.save();
                     user_rol_changed = true;
                 }
