@@ -10,7 +10,15 @@ module.exports = (sequelize, DataTypes) => {
                 models.Session,
                 {
                     foreignKey: 'userId',
-                    as: 'sessions'
+                    as: 'session'
+                }
+            );
+            // Tiene muchos posts
+            this.hasMany(
+                models.Post,
+                {
+                    foreignKey: 'userId',
+                    as: 'post'
                 }
             );
         }

@@ -17,6 +17,32 @@ function get_now() {
 }
 
 /**
+ * Lee desde el token de sesión el nombre del usuario activo.
+ * @returns string o null cuando no hay token de sesión.
+ */
+function get_user_name(req) {
+    try {
+        let token = req.cookies?.token || null;
+    
+        // No hay token
+        if (!token)
+            return null;
+        // Intenta realizar decodificación
+        let decoded_token = jwt.verify(
+            token,
+            JWT_SECRET,
+            {
+                algorithms: [JWT_ALGORITHM]
+            }
+        );
+        // Devuelve el username del usuario activo
+        return decoded_token.username;
+    } catch (err) {
+        return null;
+    }
+}
+
+/**
  * Middleware para verificar el token jwt y comprueba la sesión en base de datos.
  */
 async function auth_verify(req, res, next) {
@@ -148,6 +174,7 @@ function users_verify_token(req, res, next) {
 module.exports = {
     auth_verify: auth_verify,
     get_now: get_now,
+    get_user_name: get_user_name,
     users_verify_token: users_verify_token,
     verify_admin: verify_admin
 };

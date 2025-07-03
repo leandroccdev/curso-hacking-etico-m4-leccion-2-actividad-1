@@ -10,6 +10,7 @@ const ssr = require('../util/ssr.js');
 const tw_util = require('../util/tw.js');
 const jwt_util = require('../util/jwt.js');
 const { v4: uuidv4 } = require('uuid');
+const escape_html = require('escape-html');
 
 // Al menos 10 iteraciones en la salt de bcrypt
 const BCRYPT_SALT_ITERATIONS = parseInt(process.env.SALT_ITERATIONS) || 10;
@@ -38,8 +39,6 @@ router.get('/registro', (req, res, next) => {
         version: app_version,
         wd_color: tw_util.get_color()
     });
-    ssr.reset_error_messages(req);
-    ssr.reset_success_messages(req);
 });
 
 /**
@@ -54,6 +53,12 @@ router.post('/', async (req, res, next) => {
     if (!(username || password || password2)) {
         req.session.errors.push('¡Todos los campos son obligatorios!');
         return res.redirect('/usuario/registro');
+    }
+
+    // Valida XSS en nombre de usuario
+    if (username !== escape_html(username)) {
+        req.session.errors.push('¡Ocurrió un erro al procesar la solicitud!');
+        res.redirect('/usuario/registrar');
     }
 
     // Valida que las contraseñas concuerden
@@ -104,8 +109,6 @@ router.get('/login', jwt_util.users_verify_token, async (req, res, next) => {
         version: app_version,
         wd_color: tw_util.get_color(),
     });
-    ssr.reset_error_messages(req);
-    ssr.reset_success_messages(req);
 });
 
 /**

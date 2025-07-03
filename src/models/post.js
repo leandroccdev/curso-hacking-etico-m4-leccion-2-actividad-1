@@ -3,7 +3,8 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Session extends Model {
+    class Post extends Model {
+
         static associate(models) {
             // Pertenece a un usuario
             this.belongsTo(
@@ -15,33 +16,24 @@ module.exports = (sequelize, DataTypes) => {
             );
         }
     }
-    Session.init({
+    Post.init({
+        title: {
+            allowNull: false,
+            type: DataTypes.STRING(40)
+        },
+        body: {
+            allowNull: false,
+            type: DataTypes.TEXT
+        },
         userId: {
-            allowNull: false,
-            type: DataTypes.INTEGER
-        },
-        sessionId: {
-            allowNull: DataTypes.STRING(36),
-            type: DataTypes.TEXT
-        },
-        token: {
-            allowNull: false,
-            type: DataTypes.TEXT
-        },
-        active: {
-            allowNull: false,
-            defaultValue: true,
-            type: DataTypes.BOOLEAN
-        },
-        expireAt: {
             allowNull: false,
             type: DataTypes.INTEGER
         }
     }, {
         sequelize,
         freezeTableName: true,
-        modelName: 'Session',
-        tableName: 'session'
+        modelName: 'Post',
+        tableName: 'post'
     });
-    return Session;
+    return Post;
 };
