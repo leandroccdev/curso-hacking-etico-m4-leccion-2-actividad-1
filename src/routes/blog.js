@@ -31,6 +31,7 @@ router.get('/', jwt_util.auth_verify, async (req, res, next) => {
     });
     res.render('blog/index', {
         isAdmin: jwt_util.is_admin(req),
+        isLogged: await jwt_util.is_logged(req),
         csrf_token: req.csrfToken(),
         errors: req.session.errors,
         posts: posts,
@@ -44,10 +45,11 @@ router.get('/', jwt_util.auth_verify, async (req, res, next) => {
 /**
  * Formulario para crear una nueva entrada
  */
-router.get('/blog/nuevo', jwt_util.auth_verify, (req, res, next) => {
+router.get('/blog/nuevo', jwt_util.auth_verify, async (req, res, next) => {
     res.render('blog/new', {
         action: '/blog/nuevo',
         isAdmin: jwt_util.is_admin(req),
+        isLogged: await jwt_util.is_logged(req),
         csrf_token: req.csrfToken(),
         errors: req.session.errors,
         success: req.session.success,
@@ -90,6 +92,7 @@ router.get('/blog/:id', jwt_util.auth_verify, async (req, res, next) => {
 
     res.render('blog/message', {
         isAdmin: jwt_util.is_admin(req),
+        isLogged: await jwt_util.is_logged(req),
         delete_action: '/blog/eliminar',
         csrf_token: req.csrfToken(),
         errors: req.session.errors,
@@ -136,6 +139,7 @@ router.get('/blog/:id/editar', jwt_util.auth_verify, jwt_util.verify_admin, asyn
     res.render('blog/edit', {
         action: '/blog/editar',
         isAdmin: jwt_util.is_admin(req),
+        isLogged: await jwt_util.is_logged(req),
         csrf_token: req.csrfToken(),
         errors: req.session.errors,
         isAdmin: jwt_util.is_admin(req),

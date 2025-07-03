@@ -47,7 +47,7 @@ function get_user_name(req) {
  * @returns True si el user es administrador, false si no lo es
  */
 function is_admin(req) {
-     try {
+    try {
         let token = req.cookies?.token || null;
     
         // No hay token
@@ -63,6 +63,44 @@ function is_admin(req) {
         );
         // Devuelve el flag isAdmin
         return decoded_token.isAdmin;
+    } catch (err) {
+        return false;
+    }
+}
+
+/**
+ * Indica si el usuario tiene un token jwt válido con una sesión válida
+ * @returns True si el usuario se considera logueado, false de otra manera.
+ */
+async function is_logged(req) {
+     try {
+        let token = req.cookies?.token || null;
+
+        // No hay token
+        if (!token)
+            return false;
+
+        // Intenta realizar decodificación
+        let decoded_token = jwt.verify(
+            token,
+            JWT_SECRET,
+            {
+                algorithms: [JWT_ALGORITHM]
+            }
+        );
+
+         // Busca la sesion por id
+        let user_session = await db.Session.findOne({
+            where: {
+                sessionId: decoded_token.sessionId,
+                active: true,
+                expireAt: {
+                    [Op.gt]: get_now()
+                }
+            }
+        });
+
+        return !!user_session;
     } catch (err) {
         return false;
     }
@@ -202,6 +240,7 @@ module.exports = {
     get_now: get_now,
     get_user_name: get_user_name,
     is_admin: is_admin,
+    is_logged: is_logged,
     users_verify_token: users_verify_token,
     verify_admin: verify_admin
 };

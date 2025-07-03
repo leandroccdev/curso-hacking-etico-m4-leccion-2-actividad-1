@@ -29,10 +29,11 @@ const SESSION_MAX_AGE = parseInt(process.env.SESSION_MAX_AGE);
 /**
  * Muestra la vista de registro de usuarios
  */
-router.get('/registro', (req, res, next) => {
+router.get('/registro', async (req, res, next) => {
     res.render('user/register', {
         action: '/usuario',
         isAdmin: jwt_util.is_admin(req),
+        isLogged: await jwt_util.is_logged(req),
         csrf_token: req.csrfToken(),
         errors: req.session.errors,
         success: req.session.success,
@@ -103,6 +104,7 @@ router.post('/', async (req, res, next) => {
 router.get('/login', jwt_util.users_verify_token, async (req, res, next) => {
     res.render('user/login', {
         action: '/usuario/autenticar',
+        isLogged: await jwt_util.is_logged(req),
         csrf_token: req.csrfToken(),
         errors: req.session.errors,
         success: req.session.success,
